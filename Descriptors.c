@@ -1,12 +1,12 @@
 /*
 *
-* SparkFun Micro Pro XInput Control Firmware
+* USB360: Interfaz USB que emula control de Xbox 360 para Pro Micro originales o piratas 
 *
 * Copyright (c) 2020
 * Bruno Freitas - bruno@brunofreitas.com
 * Jon Wilson    - degenatrons@gmail.com
 * Kevin Mackett - kevin@sharpfork.com
-* CRT Gamers - crtgamers.cl
+* Bastian Aguirre - crtgamers.cl
 *
 * Este programa es software gratuito: puedes redistribuirlo y / o modificar
 * bajo los términos de la Licencia Pública General GNU publicada por
