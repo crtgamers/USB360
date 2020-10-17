@@ -28,9 +28,7 @@
 void setup_pins(void);
 
 int main(void) {
-	uint8_t pad_up, pad_down, pad_left, pad_right, pad_y, pad_b, pad_x, pad_a, pad_black,
-	pad_white, pad_start, pad_select, pad_l3, pad_r3, pad_l, pad_r, pad_left_analog_x,
-	pad_left_analog_y, pad_right_analog_x, pad_right_analog_y;
+	uint8_t pad_select, pad_start, pad_up, pad_down, pad_left, pad_right, pad_a, pad_x, pad_b, pad_y, pad_xbox, pad_l3, pad_r3, pad_l, pad_r, pad_lt, pad_rt;
 
 	// Set clock @ 16Mhz
 	CPU_PRESCALE(0);
@@ -49,32 +47,33 @@ int main(void) {
 	for (;;) {
 		xbox_reset_watchdog();
 
+		pad_select =  !bit_check(PIND, 2);
+		pad_start =  !bit_check(PIND, 3);
 		pad_up = !bit_check(PIND, 1);
 		pad_down = !bit_check(PIND, 0);
 		pad_left = !bit_check(PIND, 4);
 		pad_right = !bit_check(PINC, 6);
 		pad_y = !bit_check(PIND, 7);
-		pad_x = !bit_check(PINB, 4);
 		pad_b = !bit_check(PINE, 6);
+		pad_x = !bit_check(PINB, 4);
 		pad_a = !bit_check(PINB, 5);
-		pad_black =  !bit_check(PINB, 2);
-		pad_white =  !bit_check(PINB, 6);
-		pad_start =  !bit_check(PIND, 3);
-		pad_select =  !bit_check(PIND, 2);
+
+		pad_xbox = !bit_check(PINF, 5);
 		pad_l3 =  !bit_check(PINF, 6);
 		pad_r3 =  !bit_check(PINF, 7);
-		pad_l = !bit_check(PINB, 1);
-		pad_r = !bit_check(PINB, 3);
-
-		pad_left_analog_x = pad_left_analog_y = pad_right_analog_x = pad_right_analog_y = 0x7F;
-
+		pad_l =  !bit_check(PINB, 2);
+		pad_r =  !bit_check(PINB, 6);
+		pad_lt = !bit_check(PINB, 1);
+		pad_rt = !bit_check(PINB, 3);
+		
+		/**pad_left_analog_x = pad_left_analog_y = pad_right_analog_x = pad_right_analog_y = 0x7F;
+ 
 		if(!bit_check(PINF, 4)) {
 			pad_right_analog_y = 0x00;
 		} else if(!bit_check(PINF, 5)) {
 			pad_right_analog_y = 0xFF;
 		}
 
-		/** 
 		if(!bit_check(PINF, 4)) {
 			pad_right_analog_x = 0x00;
 		} else if(!bit_check(PINF, 5)) {
@@ -89,8 +88,7 @@ int main(void) {
 			pad_left_analog_x = 0x00;
 		} else if(!bit_check(PINF, 5)) {
 			pad_left_analog_x = 0xFF;
-		}
-		*/
+		}		*/
 
 		pad_up    ? bit_set(gamepad_state.digital_buttons_1, XBOX_DPAD_UP)    : bit_clear(gamepad_state.digital_buttons_1, XBOX_DPAD_UP);
 		pad_down  ? bit_set(gamepad_state.digital_buttons_1, XBOX_DPAD_DOWN)  : bit_clear(gamepad_state.digital_buttons_1, XBOX_DPAD_DOWN);
@@ -107,22 +105,25 @@ int main(void) {
 		pad_x ? bit_set(gamepad_state.digital_buttons_2, XBOX_X)  : bit_clear(gamepad_state.digital_buttons_2, XBOX_X);
 		pad_y ? bit_set(gamepad_state.digital_buttons_2, XBOX_Y) : bit_clear(gamepad_state.digital_buttons_2, XBOX_Y);
 
-		pad_black ? bit_set(gamepad_state.digital_buttons_2, XBOX_LB)    : bit_clear(gamepad_state.digital_buttons_2, XBOX_LB);
-		pad_white ? bit_set(gamepad_state.digital_buttons_2, XBOX_RB)    : bit_clear(gamepad_state.digital_buttons_2, XBOX_RB);
+		pad_l ? bit_set(gamepad_state.digital_buttons_2, XBOX_LB)    : bit_clear(gamepad_state.digital_buttons_2, XBOX_LB);
+		pad_r ? bit_set(gamepad_state.digital_buttons_2, XBOX_RB)    : bit_clear(gamepad_state.digital_buttons_2, XBOX_RB);
+		pad_xbox  ? bit_set(gamepad_state.digital_buttons_2, XBOX_HOME)  : bit_clear(gamepad_state.digital_buttons_2, XBOX_HOME);
 
+		gamepad_state.lt = pad_lt * 0xFF;
+		gamepad_state.rt = pad_rt * 0xFF;
+
+		/**
 		if(pad_start && pad_select) {
 			bit_set(gamepad_state.digital_buttons_2, XBOX_HOME);
 		} else {
 			bit_clear(gamepad_state.digital_buttons_2, XBOX_HOME);
 		}
 
-		//gamepad_state.l_x = pad_left_analog_x * 257 + -32768;
-		//gamepad_state.l_y = pad_left_analog_y * -257 + 32767;
-		//gamepad_state.r_x = pad_right_analog_x * 257 + -32768;
+		gamepad_state.l_x = pad_left_analog_x * 257 + -32768;
+		gamepad_state.l_y = pad_left_analog_y * -257 + 32767;
+		gamepad_state.r_x = pad_right_analog_x * 257 + -32768;
 		gamepad_state.r_y = pad_right_analog_y * -257 + 32767;
-
-		gamepad_state.lt = pad_l * 0xFF;
-		gamepad_state.rt = pad_r * 0xFF;
+		*/
 
 		xbox_send_pad_state();
 	}

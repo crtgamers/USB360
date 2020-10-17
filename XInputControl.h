@@ -22,8 +22,8 @@
 * junto con este programa. Si no, vea <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _XINPUTPAD_H_
-#define _XINPUTPAD_H_
+#ifndef _XINPUTCONTROL_H_
+#define _XINPUTCONTROL_H_
 
 /* Includes: */
 #include <avr/io.h>
